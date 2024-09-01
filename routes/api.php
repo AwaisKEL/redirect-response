@@ -16,3 +16,11 @@ use Illuminate\Http\Request;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+Route::post('redirect-response', function(Request $request) {
+    $url = base64_decode($request->url);
+    $response = Http::withHeaders([
+        'accept' => 'application/json',
+        ])->get($url, $request->except('url'))->collect();
+    return json_encode($response);
+});
